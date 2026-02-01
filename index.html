@@ -65,6 +65,8 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             background: white;
+            opacity: 0;
+            /* initially hidden */
         }
 
         button {
@@ -151,8 +153,8 @@
 
     <section>
         <div class="card reveal">
-            <p>You make me laugh.(Sometimes 😘)</p>
-            <p>You make me feel calm. (Ocasionally 🥰)</p>
+            <p>You make me laugh.</p>
+            <p>You make me feel calm.</p>
             <p class="soft">You make everything better.</p>
         </div>
     </section>
@@ -185,28 +187,32 @@
             });
         });
 
-        /* PERFECT PHOTO STACK */
+        /* SEQUENTIAL PHOTO STACK */
         const photos = gsap.utils.toArray(".photo");
 
         gsap.set(photos, {
             rotation: 0,
+            x: 0,
             y: 0,
+            opacity: 0,
             zIndex: (i) => photos.length - i
         });
 
-        gsap.timeline({
+        const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: ".stack-section",
                 start: "top top",
-                end: "+=120%",
+                end: "+=250%", // longer scroll distance
                 pin: true,
                 scrub: true
             }
-        })
-            .to(photos[0], { rotation: -15, x: -120, y: -40 }, 0)
-            .to(photos[1], { rotation: -5, x: -40, y: -20 }, 0.1)
-            .to(photos[2], { rotation: 8, x: 40, y: -20 }, 0.2)
-            .to(photos[3], { rotation: 18, x: 120, y: -40 }, 0.3);
+        });
+
+        // Sequential appearance + spread
+        tl.to(photos[0], { rotation: -20, x: -220, y: -80, opacity: 1, duration: 0.5 })
+            .to(photos[1], { rotation: -8, x: -80, y: -40, opacity: 1, duration: 0.5 }, "-=0.3")
+            .to(photos[2], { rotation: 10, x: 80, y: -40, opacity: 1, duration: 0.5 }, "-=0.3")
+            .to(photos[3], { rotation: 25, x: 220, y: -80, opacity: 1, duration: 0.5 }, "-=0.3");
 
         /* Floating hearts */
         setInterval(() => {
