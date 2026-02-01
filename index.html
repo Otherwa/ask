@@ -20,7 +20,7 @@
 
         section {
             min-height: 100vh;
-            padding: 60px 20px;
+            padding: 80px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -29,10 +29,10 @@
 
         .card {
             background: white;
-            max-width: 480px;
-            padding: 35px;
+            max-width: 520px;
+            padding: 40px;
             border-radius: 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
         }
 
         h1,
@@ -50,20 +50,21 @@
         }
 
         /* PHOTO STACK */
-        .stack-gallery {
+        .stack-wrapper {
             position: relative;
-            height: 280px;
-            margin: 30px 0;
+            height: 320px;
+            margin: 40px 0;
         }
 
-        .stack-gallery .photo {
+        .photo {
             position: absolute;
             left: 50%;
             top: 50%;
-            width: 230px;
+            width: 260px;
             transform: translate(-50%, -50%);
-            border-radius: 18px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            background: white;
         }
 
         button {
@@ -107,15 +108,14 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- SECTION 1 -->
+    <!-- INTRO -->
     <section>
         <div class="card reveal">
             <h1>Hey… 💖</h1>
-            <p class="soft">Scroll slowly. I made this for you.</p>
+            <p class="soft">Scroll slowly. I made this just for you.</p>
         </div>
     </section>
 
-    <!-- SECTION 2 -->
     <section>
         <div class="card reveal">
             <p>I’ve been wanting to ask you something.</p>
@@ -123,48 +123,40 @@
         </div>
     </section>
 
-    <!-- SECTION 3 -->
     <section>
         <div class="card reveal">
-            <p>Every time you’re around…</p>
-            <p class="soft">everything feels a little brighter.</p>
+            <p>Every moment with you</p>
+            <p class="soft">feels like something I want to remember.</p>
         </div>
     </section>
 
-    <!-- SECTION 4 — PHOTO STACK -->
-    <section>
-        <div class="card reveal">
+    <!-- PHOTO STACK (PINNED SECTION) -->
+    <section class="stack-section">
+        <div class="card">
             <h2>These moments 🥰</h2>
 
-            <div class="stack-gallery">
+            <div class="stack-wrapper">
                 <img src="images/1.jpg" class="photo">
                 <img src="images/2.jpg" class="photo">
                 <img src="images/3.jpg" class="photo">
                 <img src="images/4.jpg" class="photo">
+                <img src="images/5.jpg" class="photo">
+                <img src="images/6.jpg" class="photo">
+                <img src="images/7.jpg" class="photo">
             </div>
 
             <p class="soft">I smile every time I see them.</p>
         </div>
     </section>
 
-    <!-- SECTION 5 -->
     <section>
         <div class="card reveal">
-            <p>You make me laugh.</p>
-            <p>You make me feel calm.</p>
+            <p>You make me laugh.(Sometimes 😘)</p>
+            <p>You make me feel calm. (Ocasionally 🥰)</p>
             <p class="soft">You make everything better.</p>
         </div>
     </section>
 
-    <!-- SECTION 6 -->
-    <section>
-        <div class="card reveal">
-            <p>I was nervous making this.</p>
-            <p class="soft">But you’re worth the risk.</p>
-        </div>
-    </section>
-
-    <!-- FINAL QUESTION -->
     <section>
         <div class="card reveal">
             <h1>So I just need to know… 💘</h1>
@@ -180,7 +172,7 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        /* Reveal cards */
+        /* REVEALS */
         gsap.utils.toArray(".reveal").forEach(el => {
             gsap.from(el, {
                 scrollTrigger: {
@@ -189,30 +181,32 @@
                 },
                 opacity: 0,
                 y: 80,
-                duration: 1.3
+                duration: 1.2
             });
         });
 
-        /* PHOTO STACK ANIMATION */
-        const photos = gsap.utils.toArray(".stack-gallery .photo");
+        /* PERFECT PHOTO STACK */
+        const photos = gsap.utils.toArray(".photo");
 
         gsap.set(photos, {
             rotation: 0,
-            y: 0
+            y: 0,
+            zIndex: (i) => photos.length - i
         });
 
-        gsap.to(photos, {
+        gsap.timeline({
             scrollTrigger: {
-                trigger: ".stack-gallery",
-                start: "top 70%",
-                end: "top 20%",
+                trigger: ".stack-section",
+                start: "top top",
+                end: "+=120%",
+                pin: true,
                 scrub: true
-            },
-            stagger: 0.15,
-            rotation: i => (i - 1.5) * 12,
-            y: i => i * -45,
-            ease: "none"
-        });
+            }
+        })
+            .to(photos[0], { rotation: -15, x: -120, y: -40 }, 0)
+            .to(photos[1], { rotation: -5, x: -40, y: -20 }, 0.1)
+            .to(photos[2], { rotation: 8, x: 40, y: -20 }, 0.2)
+            .to(photos[3], { rotation: 18, x: 120, y: -40 }, 0.3);
 
         /* Floating hearts */
         setInterval(() => {
@@ -228,11 +222,11 @@
                 ease: "none",
                 onComplete: () => h.remove()
             });
-        }, 500);
+        }, 600);
 
         /* Buttons */
         yes.onclick = () => {
-            response.innerHTML = "YAY 🥹💘 You just made me incredibly happy.";
+            response.innerHTML = "YAY 🥹💘 You just made me so happy.";
             music.play();
             setTimeout(() => alert("💌 Now text me YES ❤️"), 800);
         };
