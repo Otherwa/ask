@@ -6,6 +6,7 @@
     <title>Something I Need to Ask You 💖</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- GSAP -->
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
@@ -48,18 +49,21 @@
             opacity: 0.85;
         }
 
-        /* Gallery */
-        .gallery {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding: 20px 0;
+        /* PHOTO STACK */
+        .stack-gallery {
+            position: relative;
+            height: 280px;
+            margin: 30px 0;
         }
 
-        .gallery img {
-            height: 190px;
-            border-radius: 22px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+        .stack-gallery .photo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 230px;
+            transform: translate(-50%, -50%);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
         }
 
         button {
@@ -87,7 +91,7 @@
             color: #ff4d6d;
         }
 
-        /* Hearts */
+        /* Floating hearts */
         .heart {
             position: fixed;
             bottom: -20px;
@@ -107,39 +111,38 @@
     <section>
         <div class="card reveal">
             <h1>Hey… 💖</h1>
-            <p class="soft">I hope you scroll slowly.</p>
+            <p class="soft">Scroll slowly. I made this for you.</p>
         </div>
     </section>
 
     <!-- SECTION 2 -->
     <section>
         <div class="card reveal">
-            <p>I’ve been wanting to ask you something for a while now.</p>
-            <p class="soft">But I wanted to do it in a way you’d remember.</p>
+            <p>I’ve been wanting to ask you something.</p>
+            <p class="soft">But I wanted it to feel special.</p>
         </div>
     </section>
 
     <!-- SECTION 3 -->
     <section>
         <div class="card reveal">
-            <p>Every time I talk to you…</p>
-            <p class="soft">my day gets better without me even realizing it.</p>
+            <p>Every time you’re around…</p>
+            <p class="soft">everything feels a little brighter.</p>
         </div>
     </section>
 
-    <!-- SECTION 4 -->
+    <!-- SECTION 4 — PHOTO STACK -->
     <section>
         <div class="card reveal">
             <h2>These moments 🥰</h2>
-            <div class="gallery">
-                <img src="images/1.jpg">
-                <img src="images/2.jpg">
-                <img src="images/3.jpg">
-                <img src="images/4.jpg">
-                <img src="images/5.jpg">
-                <img src="images/6.jpg">
-                <img src="images/7.jpg">
+
+            <div class="stack-gallery">
+                <img src="images/1.jpg" class="photo">
+                <img src="images/2.jpg" class="photo">
+                <img src="images/3.jpg" class="photo">
+                <img src="images/4.jpg" class="photo">
             </div>
+
             <p class="soft">I smile every time I see them.</p>
         </div>
     </section>
@@ -149,7 +152,7 @@
         <div class="card reveal">
             <p>You make me laugh.</p>
             <p>You make me feel calm.</p>
-            <p class="soft">And somehow… you make everything feel right.</p>
+            <p class="soft">You make everything better.</p>
         </div>
     </section>
 
@@ -157,11 +160,11 @@
     <section>
         <div class="card reveal">
             <p>I was nervous making this.</p>
-            <p class="soft">But some things are worth the risk.</p>
+            <p class="soft">But you’re worth the risk.</p>
         </div>
     </section>
 
-    <!-- SECTION 7 (FINAL QUESTION) -->
+    <!-- FINAL QUESTION -->
     <section>
         <div class="card reveal">
             <h1>So I just need to know… 💘</h1>
@@ -177,6 +180,7 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
+        /* Reveal cards */
         gsap.utils.toArray(".reveal").forEach(el => {
             gsap.from(el, {
                 scrollTrigger: {
@@ -189,13 +193,35 @@
             });
         });
 
-        // Floating hearts
+        /* PHOTO STACK ANIMATION */
+        const photos = gsap.utils.toArray(".stack-gallery .photo");
+
+        gsap.set(photos, {
+            rotation: 0,
+            y: 0
+        });
+
+        gsap.to(photos, {
+            scrollTrigger: {
+                trigger: ".stack-gallery",
+                start: "top 70%",
+                end: "top 20%",
+                scrub: true
+            },
+            stagger: 0.15,
+            rotation: i => (i - 1.5) * 12,
+            y: i => i * -45,
+            ease: "none"
+        });
+
+        /* Floating hearts */
         setInterval(() => {
             const h = document.createElement("div");
             h.className = "heart";
             h.innerHTML = "💖";
             h.style.left = Math.random() * 100 + "vw";
             document.body.appendChild(h);
+
             gsap.to(h, {
                 y: "-120vh",
                 duration: 6,
@@ -204,6 +230,7 @@
             });
         }, 500);
 
+        /* Buttons */
         yes.onclick = () => {
             response.innerHTML = "YAY 🥹💘 You just made me incredibly happy.";
             music.play();
