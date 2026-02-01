@@ -1,258 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Be My Valentine 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Something I Need to Ask You 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GSAP -->
-<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
-<style>
-  body {
-    margin: 0;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: linear-gradient(180deg, #ff9a9e, #fad0c4);
-    overflow-x: hidden;
-  }
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(180deg, #ff9a9e, #fad0c4);
+            overflow-x: hidden;
+        }
 
-  section {
-    height: 100vh;
-    scroll-snap-align: start;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 40px 20px;
-  }
+        section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
 
-  html {
-    scroll-snap-type: y mandatory;
-  }
+        .card {
+            background: white;
+            max-width: 480px;
+            padding: 35px;
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
 
-  .card {
-    background: white;
-    max-width: 420px;
-    padding: 30px;
-    border-radius: 25px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    position: relative;
-    z-index: 2;
-  }
+        h1,
+        h2 {
+            color: #ff4d6d;
+        }
 
-  h1, h2 { color: #ff4d6d; }
-  p { font-size: 18px; }
+        p {
+            font-size: 20px;
+            line-height: 1.6;
+        }
 
-  /* Typing */
-  .typing {
-    border-right: 3px solid #ff4d6d;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-  }
+        .soft {
+            opacity: 0.85;
+        }
 
-  /* Gallery */
-  .gallery {
-    display: flex;
-    gap: 14px;
-    overflow-x: auto;
-    padding: 20px 0;
-  }
+        /* Gallery */
+        .gallery {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
 
-  .gallery img {
-    height: 180px;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  }
+        .gallery img {
+            height: 190px;
+            border-radius: 22px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+        }
 
-  button {
-    font-size: 18px;
-    padding: 12px 26px;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    margin: 10px;
-  }
+        button {
+            font-size: 20px;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            margin: 12px;
+        }
 
-  #yes { background: #ff4d6d; color: white; }
-  #no { background: #ddd; position: relative; }
+        #yes {
+            background: #ff4d6d;
+            color: white;
+        }
 
-  /* Progress dots */
-  .dots {
-    position: fixed;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 10;
-  }
+        #no {
+            background: #ddd;
+            position: relative;
+        }
 
-  .dot {
-    width: 12px;
-    height: 12px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.4;
-  }
+        #response {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #ff4d6d;
+        }
 
-  .dot.active { opacity: 1; background: #ff4d6d; }
-
-  /* Lightbox */
-  #lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-  }
-
-  #lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 20px;
-  }
-
-  /* Hearts */
-  .heart {
-    position: fixed;
-    bottom: -20px;
-    font-size: 24px;
-    pointer-events: none;
-  }
-</style>
+        /* Hearts */
+        .heart {
+            position: fixed;
+            bottom: -20px;
+            font-size: 26px;
+            pointer-events: none;
+        }
+    </style>
 </head>
 
 <body>
 
-<audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
+    <audio id="music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
 
-<div class="dots">
-  <div class="dot active"></div>
-  <div class="dot"></div>
-  <div class="dot"></div>
-  <div class="dot"></div>
-</div>
+    <!-- SECTION 1 -->
+    <section>
+        <div class="card reveal">
+            <h1>Hey… 💖</h1>
+            <p class="soft">I hope you scroll slowly.</p>
+        </div>
+    </section>
 
-<section>
-  <div class="card intro">
-    <h1 class="typing">Hey my love 💖</h1>
-    <p>Scroll… I made this just for you 🥹</p>
-  </div>
-</section>
+    <!-- SECTION 2 -->
+    <section>
+        <div class="card reveal">
+            <p>I’ve been wanting to ask you something for a while now.</p>
+            <p class="soft">But I wanted to do it in a way you’d remember.</p>
+        </div>
+    </section>
 
-<section>
-  <div class="card countdown">
-    <h2>⏳ Countdown</h2>
-    <p id="countdown"></p>
-  </div>
-</section>
+    <!-- SECTION 3 -->
+    <section>
+        <div class="card reveal">
+            <p>Every time I talk to you…</p>
+            <p class="soft">my day gets better without me even realizing it.</p>
+        </div>
+    </section>
 
-<section>
-  <div class="card memories">
-    <h2>Our Memories 🥰</h2>
-    <div class="gallery">
-      <img src="images/1.jpg">
-      <img src="images/2.jpg">
-      <img src="images/3.jpg">
-      <img src="images/4.jpg">
-    </div>
-    <p>(tap a photo 💕)</p>
-  </div>
-</section>
+    <!-- SECTION 4 -->
+    <section>
+        <div class="card reveal">
+            <h2>These moments 🥰</h2>
+            <div class="gallery">
+                <img src="images/1.jpg">
+                <img src="images/2.jpg">
+                <img src="images/3.jpg">
+                <img src="images/4.jpg">
+                <img src="images/5.jpg">
+                <img src="images/6.jpg">
+            </div>
+            <p class="soft">I smile every time I see them.</p>
+        </div>
+    </section>
 
-<section>
-  <div class="card question">
-    <h1>Will You Be My Valentine? 💘</h1>
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 😢</button>
-    <div id="response"></div>
-  </div>
-</section>
+    <!-- SECTION 5 -->
+    <section>
+        <div class="card reveal">
+            <p>You make me laugh.</p>
+            <p>You make me feel calm.</p>
+            <p class="soft">And somehow… you make everything feel right.</p>
+        </div>
+    </section>
 
-<div id="lightbox" onclick="this.style.display='none'">
-  <img id="lightboxImg">
-</div>
+    <!-- SECTION 6 -->
+    <section>
+        <div class="card reveal">
+            <p>I was nervous making this.</p>
+            <p class="soft">But some things are worth the risk.</p>
+        </div>
+    </section>
 
-<script>
-  gsap.registerPlugin(ScrollTrigger);
+    <!-- SECTION 7 (FINAL QUESTION) -->
+    <section>
+        <div class="card reveal">
+            <h1>So I just need to know… 💘</h1>
+            <h2>Will you be my Valentine?</h2>
 
-  // Typing animation
-  gsap.to(".typing", {
-    width: "14ch",
-    duration: 2,
-    ease: "none"
-  });
+            <button id="yes">Yes 💕</button>
+            <button id="no">No 😢</button>
 
-  // Section animations
-  gsap.utils.toArray("section").forEach((sec, i) => {
-    gsap.from(sec.querySelector(".card"), {
-      scrollTrigger: {
-        trigger: sec,
-        start: "top center",
-        onEnter: () => activateDot(i)
-      },
-      opacity: 0,
-      y: 80,
-      duration: 1.2
-    });
-  });
+            <div id="response"></div>
+        </div>
+    </section>
 
-  function activateDot(i) {
-    document.querySelectorAll(".dot").forEach((d, idx) => {
-      d.classList.toggle("active", idx === i);
-    });
-  }
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
 
-  // Countdown
-  const vday = new Date(new Date().getFullYear(), 1, 14);
-  const days = Math.ceil((vday - new Date()) / (1000*60*60*24));
-  document.getElementById("countdown").innerText =
-    days > 0 ? `${days} days until Valentine’s Day 💌` : "It’s Valentine’s Day 💖";
+        gsap.utils.toArray(".reveal").forEach(el => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 80%"
+                },
+                opacity: 0,
+                y: 80,
+                duration: 1.3
+            });
+        });
 
-  // Lightbox
-  document.querySelectorAll(".gallery img").forEach(img => {
-    img.onclick = () => {
-      lightboxImg.src = img.src;
-      lightbox.style.display = "flex";
-    };
-  });
+        // Floating hearts
+        setInterval(() => {
+            const h = document.createElement("div");
+            h.className = "heart";
+            h.innerHTML = "💖";
+            h.style.left = Math.random() * 100 + "vw";
+            document.body.appendChild(h);
+            gsap.to(h, {
+                y: "-120vh",
+                duration: 6,
+                ease: "none",
+                onComplete: () => h.remove()
+            });
+        }, 500);
 
-  // Parallax hearts
-  setInterval(() => {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.innerHTML = "💖";
-    h.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(h);
-    gsap.to(h, {
-      y: "-120vh",
-      x: (Math.random() * 200 - 100),
-      duration: 6,
-      ease: "none",
-      onComplete: () => h.remove()
-    });
-  }, 400);
+        yes.onclick = () => {
+            response.innerHTML = "YAY 🥹💘 You just made me incredibly happy.";
+            music.play();
+            setTimeout(() => alert("💌 Now text me YES ❤️"), 800);
+        };
 
-  // Buttons
-  yes.onclick = () => {
-    response.innerHTML = "YAY!!! 💘 You just made me the happiest 🥹💕";
-    music.play();
-    alert("💌 Now text me YES ❤️");
-  };
-
-  no.onclick = () => {
-    no.style.left = Math.random() * 80 + "%";
-    no.style.top = Math.random() * 80 + "%";
-  };
-</script>
+        no.onclick = () => {
+            no.style.left = Math.random() * 80 + "%";
+            no.style.top = Math.random() * 80 + "%";
+        };
+    </script>
 
 </body>
+
 </html>
