@@ -1,174 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Be My Valentine 💖</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-            overflow-x: hidden;
-        }
+<!-- GSAP -->
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            max-width: 420px;
-            margin: auto;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-            position: relative;
-            z-index: 2;
-        }
+<style>
+  body {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(180deg, #ff9a9e, #fad0c4);
+    overflow-x: hidden;
+  }
 
-        h1 {
-            color: #ff4d6d;
-        }
+  section {
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
 
-        button {
-            font-size: 18px;
-            padding: 10px 22px;
-            margin: 10px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-        }
+  html {
+    scroll-snap-type: y mandatory;
+  }
 
-        #yes {
-            background: #ff4d6d;
-            color: white;
-        }
+  .card {
+    background: white;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
+  }
 
-        #no {
-            background: #ddd;
-            position: relative;
-        }
+  h1, h2 { color: #ff4d6d; }
+  p { font-size: 18px; }
 
-        /* Gallery */
-        .gallery {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding: 15px 0;
-        }
+  /* Typing */
+  .typing {
+    border-right: 3px solid #ff4d6d;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+  }
 
-        .gallery img {
-            height: 160px;
-            border-radius: 15px;
-            flex-shrink: 0;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-        }
+  /* Gallery */
+  .gallery {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 20px 0;
+  }
 
-        #response {
-            font-size: 22px;
-            margin-top: 15px;
-            color: #ff4d6d;
-        }
+  .gallery img {
+    height: 180px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
 
-        /* Floating hearts */
-        .heart {
-            position: fixed;
-            bottom: -20px;
-            font-size: 24px;
-            animation: floatUp 6s linear infinite;
-            opacity: 0.8;
-        }
+  button {
+    font-size: 18px;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    margin: 10px;
+  }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
+  #yes { background: #ff4d6d; color: white; }
+  #no { background: #ddd; position: relative; }
 
-            100% {
-                transform: translateY(-120vh);
-                opacity: 0;
-            }
-        }
-    </style>
+  /* Progress dots */
+  .dots {
+    position: fixed;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+
+  .dot.active { opacity: 1; background: #ff4d6d; }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+  }
+
+  #lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 20px;
+  }
+
+  /* Hearts */
+  .heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 24px;
+    pointer-events: none;
+  }
+</style>
 </head>
 
 <body>
 
-    <audio id="music" loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
-    <div class="card">
-        <h1>💖 Will You Be My Valentine? 💖</h1>
-        <p>Swipe through our cutest memories 🥰</p>
+<div class="dots">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
 
-        <div class="gallery" id="gallery">
-            <img src="images/1.jpg">
-            <img src="images/2.jpg">
-            <img src="images/3.jpg">
-            <img src="images/4.jpg">
-        </div>
+<section>
+  <div class="card intro">
+    <h1 class="typing">Hey my love 💖</h1>
+    <p>Scroll… I made this just for you 🥹</p>
+  </div>
+</section>
 
-        <button id="yes" onclick="yesClick()">Yes 💕</button>
-        <button id="no" onclick="noClick()">No 😢</button>
+<section>
+  <div class="card countdown">
+    <h2>⏳ Countdown</h2>
+    <p id="countdown"></p>
+  </div>
+</section>
 
-        <div id="response"></div>
+<section>
+  <div class="card memories">
+    <h2>Our Memories 🥰</h2>
+    <div class="gallery">
+      <img src="images/1.jpg">
+      <img src="images/2.jpg">
+      <img src="images/3.jpg">
+      <img src="images/4.jpg">
     </div>
+    <p>(tap a photo 💕)</p>
+  </div>
+</section>
 
-    <script>
-  // Auto-scroll gallery
-  const gallery = document.getElementById("gallery");
-  let scrollPos = 0;
-  setInterval(() => {
-    scrollPos += 1;
-    gallery.scrollLeft = scrollPos;
-    if (scrollPos > gallery.scrollWidth) scrollPos = 0;
-  }, 30);
+<section>
+  <div class="card question">
+    <h1>Will You Be My Valentine? 💘</h1>
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 😢</button>
+    <div id="response"></div>
+  </div>
+</section>
 
-  // Floating hearts
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💖";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (4 + Math.random() * 3) + "s";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 7000);
-  }, 500);
+<div id="lightbox" onclick="this.style.display='none'">
+  <img id="lightboxImg">
+</div>
 
-  function yesClick() {
-    document.getElementById("response").innerHTML =
-      "YAY!!! 💘 You just made me the happiest person alive 🥹💕";
-    document.getElementById("music").play();
-    confetti();
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Typing animation
+  gsap.to(".typing", {
+    width: "14ch",
+    duration: 2,
+    ease: "none"
+  });
+
+  // Section animations
+  gsap.utils.toArray("section").forEach((sec, i) => {
+    gsap.from(sec.querySelector(".card"), {
+      scrollTrigger: {
+        trigger: sec,
+        start: "top center",
+        onEnter: () => activateDot(i)
+      },
+      opacity: 0,
+      y: 80,
+      duration: 1.2
+    });
+  });
+
+  function activateDot(i) {
+    document.querySelectorAll(".dot").forEach((d, idx) => {
+      d.classList.toggle("active", idx === i);
+    });
   }
 
-  function noClick() {
-    const no = document.getElementById("no");
-    no.style.position = "absolute";
+  // Countdown
+  const vday = new Date(new Date().getFullYear(), 1, 14);
+  const days = Math.ceil((vday - new Date()) / (1000*60*60*24));
+  document.getElementById("countdown").innerText =
+    days > 0 ? `${days} days until Valentine’s Day 💌` : "It’s Valentine’s Day 💖";
+
+  // Lightbox
+  document.querySelectorAll(".gallery img").forEach(img => {
+    img.onclick = () => {
+      lightboxImg.src = img.src;
+      lightbox.style.display = "flex";
+    };
+  });
+
+  // Parallax hearts
+  setInterval(() => {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "💖";
+    h.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(h);
+    gsap.to(h, {
+      y: "-120vh",
+      x: (Math.random() * 200 - 100),
+      duration: 6,
+      ease: "none",
+      onComplete: () => h.remove()
+    });
+  }, 400);
+
+  // Buttons
+  yes.onclick = () => {
+    response.innerHTML = "YAY!!! 💘 You just made me the happiest 🥹💕";
+    music.play();
+    alert("💌 Now text me YES ❤️");
+  };
+
+  no.onclick = () => {
     no.style.left = Math.random() * 80 + "%";
     no.style.top = Math.random() * 80 + "%";
-  }
-
-  // Confetti effect
-  function confetti() {
-    for (let i = 0; i < 50; i++) {
-      const c = document.createElement("div");
-      c.innerHTML = "🎉";
-      c.style.position = "fixed";
-      c.style.left = Math.random() * 100 + "vw";
-      c.style.top = "-10px";
-      c.style.fontSize = "24px";
-      c.style.animation = "floatUp 3s linear";
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 3000);
-    }
-  }
-    </script>
+  };
+</script>
 
 </body>
-
 </html>
